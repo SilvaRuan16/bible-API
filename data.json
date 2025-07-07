@@ -1,9 +1,0 @@
-{
-  "livros": [
-    {
-      "livro": "GÊNESIS",
-      "capitulo": 1,
-      "audioUrl": "http://localhost:3000/audios/GEN_001.mp3"
-    }
-  ]
-}
