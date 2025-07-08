@@ -90,7 +90,7 @@ const gerarAudiosBiblia = () => {
       livro: audio.nome,
       capitulo: `${i + 1}`,
       title: `${audio.nome} ${i + 1}`,
-      file: `assets/audios/${audio.testamento}/${audio.testamento === "velhoTestamento" ? "PORBBSO1DA" : "PORBBSN1DA"}_${audio.codigo}_${audio.sigla}_${(i + 1).toString().padStart(3, "0")}.mp3`
+      file: `audios/${audio.testamento}/${audio.testamento === "velhoTestamento" ? "PORBBSO1DA" : "PORBBSN1DA"}_${audio.codigo}_${audio.sigla}_${(i + 1).toString().padStart(3, "0")}.mp3`
     }));
   });
 }
