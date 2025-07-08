@@ -1,8 +1,11 @@
 import express from "express";
 import type { Express, Request, Response } from "express";
+import path from "path";
 
 const app: Express = express();
 const PORT: number = 3000;
+
+app.use("/audios", express.static(path.join(__dirname, "audios")));
 
 interface AudioBiblia {
   nome: string,
@@ -84,23 +87,19 @@ const audios: AudioBiblia[] = [
   { "nome": "APOCALIPSE", "sigla": "REV", "capitulos": 22, "codigo": "B27", "testamento": "novoTestamento" },
 ];
 
-const gerarAudiosBiblia = () => {
-  return audios.flatMap((audio) => {
-    return Array.from({length: audio.capitulos}, (_, i) => ({
-      livro: audio.nome,
-      capitulo: `${i + 1}`,
-      title: `${audio.nome} ${i + 1}`,
-      file: `audios/${audio.testamento}/${audio.testamento === "velhoTestamento" ? "PORBBSO1DA" : "PORBBSN1DA"}_${audio.codigo}_${audio.sigla}_${(i + 1).toString().padStart(3, "0")}.mp3`
-    }));
-  });
-}
-
-const bibleAudios = gerarAudiosBiblia();
-app.use(express.json());
-
 app.get("/audios", (req: Request, res: Response) => {
   try {
-    res.status(200).json(bibleAudios);
+    const a = audios.flatMap(audio => Array.from({length: audio.capitulos}, (_,i) => {
+      const capitulo = (i + 1).toString().padStart(3, "0");
+      const prefixo = audio.testamento === "velhoTestamento" ? "PORBBSO1DA" : "PORBBSN1DA";
+      return {
+        livro: audio.nome,
+        capitulo: `${i + 1}`,
+        title: `${audio.nome} ${i + 1}`,
+        file: `/audios/${audio.testamento}/${prefixo}_${audio.codigo}_${audio.sigla}_${capitulo}.mp3`
+      };
+    }));
+    res.json(a);
   } catch (error) {
     console.log(error);
     res.status(500).json({ "message": `Ocorreu um erro interno no servidor.` });
